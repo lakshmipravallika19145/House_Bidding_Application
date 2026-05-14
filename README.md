@@ -133,8 +133,3 @@ git push -u origin main
 - Backend not starting: verify MySQL is running and DB credentials are correct.
 - CORS issues: ensure frontend uses `http://localhost:5173` and backend uses `http://localhost:8081`.
 - WebSocket not connecting: confirm backend is running and `/ws-auction` endpoint is reachable.
-
-## Notes
-
-- This repo is structured as a monorepo for easier collaboration and single-point deployment/versioning.
-- You can expand this README later with screenshots, API docs, and deployment instructions.
