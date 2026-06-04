@@ -8,8 +8,7 @@ logs/
 *.log
 *.tmp
 
-# Local secrets/config
-src/main/resources/application.yml
+# Local overrides only (optional personal secrets)
 src/main/resources/application-local.yml
 .env
 .env.*
