@@ -64,7 +64,23 @@ https://YOUR-SERVICE.onrender.com/test
 
 Expected text: `Backend is running perfectly!`
 
-## 6) JwtUtil / jwt bean error
+## 6) otpService / mail error
+
+If logs show `Error creating bean with name 'otpService'`:
+
+**Option A (quick — app starts, OTP in logs):**  
+Do **not** set `SPRING_MAIL_USERNAME` on Render. Latest code prints OTP in Render logs instead of email.
+
+**Option B (real email):** Set on Render:
+
+| Key | Value |
+|-----|--------|
+| `SPRING_MAIL_USERNAME` | your Gmail |
+| `SPRING_MAIL_PASSWORD` | Gmail App Password (16 chars) |
+
+Delete `APP_OTP_EXPIRY_MINUTES` if it is empty.
+
+## 7) JwtUtil / jwt bean error
 
 If logs show `Error creating bean with name 'jwtUtil'`:
 
@@ -72,7 +88,7 @@ If logs show `Error creating bean with name 'jwtUtil'`:
 2. **Delete** `APP_JWT_EXPIRATION` from Render if it is empty
 3. Redeploy after pushing latest code (JWT no longer requires Base64)
 
-## 7) If still failed
+## 8) If still failed
 
 In Render **Logs**, search for:
 

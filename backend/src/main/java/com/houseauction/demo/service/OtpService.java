@@ -15,7 +15,7 @@ public class OtpService {
     private final UserRepository userRepository;
     private final JavaMailSender mailSender;
 
-    @Value("${app.otp-expiry-minutes}")
+    @Value("${app.otp-expiry-minutes:5}")
     private int otpExpiryMinutes;
 
     public OtpService(UserRepository userRepository, JavaMailSender mailSender) {

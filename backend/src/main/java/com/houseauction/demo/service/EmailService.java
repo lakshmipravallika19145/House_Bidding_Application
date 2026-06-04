@@ -12,7 +12,7 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
 
-    @Value("${app.admin-email}")
+    @Value("${app.admin-email:admin@example.com}")
     private String adminEmail;
 
     public EmailService(JavaMailSender mailSender) {
