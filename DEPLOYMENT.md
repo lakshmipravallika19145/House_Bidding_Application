@@ -51,7 +51,8 @@ jdbc:mysql://<HOST>:<PORT>/<DB_NAME>?createDatabaseIfNotExist=true&useSSL=true&r
    - **Name:** `house-bidding-api`
    - **Root Directory:** `backend`
    - **Runtime:** Java
-   - **Build Command:** `./mvnw clean package -DskipTests`
+   - **Language:** Java (not Node)
+   - **Build Command:** `chmod +x mvnw && ./mvnw clean package -DskipTests`
    - **Start Command:** `java -jar target/demo-0.0.1-SNAPSHOT.jar`
    - **Instance type:** Free (for testing)
 
