@@ -27,7 +27,7 @@ spring:
       max-request-size: 20MB
 
 app:
-  jwt-secret: ${APP_JWT_SECRET:local-dev-only-change-in-production}
+  jwt-secret: ${APP_JWT_SECRET:HouseAuctionJwtSecretKeyForRenderDeploy2026}
   jwt-expiration: ${APP_JWT_EXPIRATION:86400000}
   otp-expiry-minutes: ${APP_OTP_EXPIRY_MINUTES:5}
   admin-email: ${APP_ADMIN_EMAIL:admin@example.com}

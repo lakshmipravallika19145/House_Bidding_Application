@@ -1,21 +1,30 @@
 package com.houseauction.demo.security;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Component
 public class JwtUtil {
 
-    @Value("${app.jwt-secret}")
+    @Value("${app.jwt-secret:HouseAuctionJwtSecretKeyForRenderDeploy2026}")
     private String secret;
 
-    @Value("${app.jwt-expiration}")
+    @Value("${app.jwt-expiration:86400000}")
     private long expiration;
+
+    private SecretKey signingKey() {
+        byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
+        if (keyBytes.length < 32) {
+            throw new IllegalStateException("app.jwt-secret must be at least 32 characters");
+        }
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
 
     public String generateToken(String email, String role) {
         return Jwts.builder()
@@ -23,7 +32,7 @@ public class JwtUtil {
                 .claim("role", role)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret)), Jwts.SIG.HS256)
+                .signWith(signingKey(), Jwts.SIG.HS256)
                 .compact();
     }
 
@@ -46,7 +55,7 @@ public class JwtUtil {
 
     private Claims getClaims(String token) {
         return Jwts.parser()
-                .verifyWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret)))
+                .verifyWith(signingKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();

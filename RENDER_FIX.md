@@ -21,7 +21,7 @@ Use Railway **MYSQL_PUBLIC_URL** values (NOT `mysql.railway.internal`).
 | `SPRING_DATASOURCE_URL` | See JDBC line below |
 | `SPRING_DATASOURCE_USERNAME` | `root` |
 | `SPRING_DATASOURCE_PASSWORD` | Railway `MYSQLPASSWORD` |
-| `APP_JWT_SECRET` | long random text |
+| `APP_JWT_SECRET` | plain text, **at least 32 characters** (not Base64) |
 | `APP_ADMIN_EMAIL` | your email |
 | `APP_CORS_ALLOWED_ORIGINS` | `http://localhost:5173` |
 | `SPRING_MAIL_USERNAME` | Gmail address (for OTP) |
@@ -64,7 +64,15 @@ https://YOUR-SERVICE.onrender.com/test
 
 Expected text: `Backend is running perfectly!`
 
-## 6) If still failed
+## 6) JwtUtil / jwt bean error
+
+If logs show `Error creating bean with name 'jwtUtil'`:
+
+1. Set `APP_JWT_SECRET` to a long plain password, e.g. `HouseAuctionMySecretKey2026ForProduction`
+2. **Delete** `APP_JWT_EXPIRATION` from Render if it is empty
+3. Redeploy after pushing latest code (JWT no longer requires Base64)
+
+## 7) If still failed
 
 In Render **Logs**, search for:
 
