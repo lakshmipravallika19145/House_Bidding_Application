@@ -134,7 +134,21 @@ git push -u origin main
 - CORS issues: ensure frontend uses `http://localhost:5173` and backend uses `http://localhost:8081`.
 - WebSocket not connecting: confirm backend is running and `/ws-auction` endpoint is reachable.
 
+## Deployment
+
+For step-by-step cloud deployment (MySQL + Render backend + Vercel frontend), see:
+
+- [DEPLOYMENT.md](./DEPLOYMENT.md)
+
+Production frontend must set:
+
+- `VITE_API_BASE_URL=https://<your-backend-host>`
+
+Production backend must allow your frontend URL in:
+
+- `app.cors-allowed-origins`
+
 ## Notes
 
 - This repo is structured as a monorepo for easier collaboration and single-point deployment/versioning.
-- You can expand this README later with screenshots, API docs, and deployment instructions.
+- Uploaded files on free hosting may not persist across redeploys; use cloud storage for long-term production.

@@ -4,7 +4,8 @@ import { createProperty, getMyProperties, getMyAuctions, logout, resubmitPropert
 import DashboardLayout from "../../components/DashboardLayout"
 
 // ── Constants ─────────────────────────────────────────────────────────────────
-const BASE = "http://localhost:8081"
+import { API_BASE } from "../../config/api"
+const BASE = API_BASE
 const PRIMARY = "#4f46e5"
 
 // ── Utilities ─────────────────────────────────────────────────────────────────

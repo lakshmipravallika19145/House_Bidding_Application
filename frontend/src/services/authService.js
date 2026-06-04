@@ -1,13 +1,14 @@
 import axios from "axios"
+import { API_URL } from "../config/api"
 
 // ── Axios instances ───────────────────────────────────────────────────────────
 export const api = axios.create({
-    baseURL: "http://localhost:8081/api",
+    baseURL: API_URL,
     withCredentials: true,
 })
 
 export const publicApi = axios.create({
-    baseURL: "http://localhost:8081/api",
+    baseURL: API_URL,
     withCredentials: false,
 })
 api.interceptors.request.use(

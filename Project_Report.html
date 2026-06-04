@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>House Bidding Application - Project Report</title>
+<style>
+    body {
+        background-color: white;
+        color: black;
+        font-family: "Times New Roman", Times, serif;
+        margin: 0;
+        padding: 40px;
+        display: flex;
+        justify-content: center;
+    }
+    .report-container {
+        width: 100%;
+        max-width: 800px;
+        /* Borders removed as requested */
+        padding: 20px;
+        box-sizing: border-box;
+    }
+    h1 {
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 26px;
+        border-bottom: 2px solid black;
+        padding-bottom: 10px;
+        margin-bottom: 40px;
+    }
+    h2 {
+        font-size: 20px;
+        margin-top: 30px;
+        text-transform: uppercase;
+        border-bottom: 1px solid black;
+        display: inline-block;
+        padding-bottom: 5px;
+    }
+    h3 {
+        font-size: 18px;
+        margin-top: 20px;
+    }
+    p, li {
+        font-size: 16px;
+        line-height: 1.6;
+        text-align: justify;
+    }
+    ul, ol {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    
+    /* Neatly styled tables */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 15px;
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 12px;
+        text-align: left;
+    }
+    th {
+        background-color: #f7f7f7;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    td {
+        vertical-align: top;
+    }
+</style>
+</head>
+<body>
+
+<div class="report-container">
+    <h1>Project Report: House Bidding Application</h1>
+
+    <h2>1. Abstract</h2>
+    <p>The House Bidding Application is an end-to-end online platform designed to facilitate secure, transparent, and efficient property auctions. Built utilizing a modern technology stack comprising a React frontend and a Spring Boot backend, the system bridges the gap between traditional real estate auctions and digital accessibility. Key features include role-based user access, stringent verification workflows including income proof validation, and a real-time bidding engine powered by WebSockets. This report details the architecture, implementation, and overall development of the platform, demonstrating a scalable solution to modern real estate auctioning challenges.</p>
+
+    <h2>2. Introduction</h2>
+    <p>Real estate auctions have historically been conducted in physical locations, requiring the presence of auctioneers, bidders, and legal representatives. While effective, this traditional method limits participation to local buyers and often suffers from a lack of immediate transparency. The House Bidding Application introduces a comprehensive digital solution that allows users to participate in live property auctions from anywhere in the world. By integrating real-time communication protocols and secure user authentication, the platform ensures that the bidding process is both competitive and secure.</p>
+
+    <h2>3. Background of the Study</h2>
+    <p>With the rapid digitalization of services, the real estate sector has seen a surge in online property listings and virtual tours. However, the actual auctioning process has lagged behind, often relying on rudimentary timed forms rather than live, interactive bidding rooms. The need for a platform that not only lists properties but also securely vets bidders and hosts real-time auctions is evident. This project stems from the necessity to modernize property auctions, making them accessible, transparent, and legally compliant through structured digital workflows.</p>
+
+    <h2>4. Problem Statement</h2>
+    <p>Traditional property auctions present several critical issues: geographic limitations that restrict the pool of potential buyers, manual and error-prone bidder verification processes, and a lack of real-time synchronization which can lead to disputes over bid timings. Furthermore, existing online solutions often fail to provide a robust live-bidding experience paired with strict security measures, such as verified proof of income, to ensure that only capable buyers participate.</p>
+
+    <h2>5. Objectives</h2>
+    <p>The primary objectives of this project are:</p>
+    <ul>
+        <li>To design and develop a full-stack web application capable of hosting online property auctions.</li>
+        <li>To implement a secure, role-based authentication system for Admin, Auctioneer, and Bidder workflows.</li>
+        <li>To facilitate a real-time, interactive bidding environment using WebSockets.</li>
+        <li>To establish a secure verification process, allowing bidders to upload and auctioneers to review income proofs prior to auction participation.</li>
+    </ul>
+
+    <h2>6. Scope of the Project</h2>
+    <p>The scope encompasses the complete software development lifecycle of the web application. It includes user registration and login with OTP verification, property listing management by auctioneers, an application process for bidders to submit necessary documentation, and a live auction room with real-time bid tracking. The scope currently excludes the final legal transfer of property titles, post-auction contractual signatures, and direct payment gateway integrations for the final property purchase.</p>
+
+    <h2>7. Review of Existing Work (Literature Review)</h2>
+    <p>A review of existing real estate platforms shows a strong focus on direct buyer-to-seller interactions or standard listings. Platforms that do offer auctions often utilize standard timed-bidding without the fast-paced, real-time feedback loop required for high-stakes real estate transactions. Research into web communication protocols indicates that while REST APIs are sufficient for standard operations, WebSocket protocols (specifically STOMP over SockJS) are the industry standard for delivering the low-latency communication required for live auction rooms.</p>
+
+    <h2>8. Methodology & System Architecture</h2>
+    <p>The project follows a decoupled Client-Server architecture. The methodology involves Agile development practices, iterating over core features from authentication to real-time bidding.</p>
+    
+    <h3>8.1 Technology Stack</h3>
+    <p>The following table outlines the carefully selected technologies used across the different layers of the application:</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>System Layer</th>
+                <th>Technology Used</th>
+                <th>Purpose / Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Frontend (Client)</strong></td>
+                <td>React.js, Vite</td>
+                <td>Provides a responsive Single Page Application (SPA) for users. Vite is used for rapid build times.</td>
+            </tr>
+            <tr>
+                <td><strong>Styling / UI</strong></td>
+                <td>CSS, Tailwind CSS</td>
+                <td>Ensures a clean, modern, and fully responsive user interface across all devices.</td>
+            </tr>
+            <tr>
+                <td><strong>Backend (Server)</strong></td>
+                <td>Java, Spring Boot</td>
+                <td>Handles core business logic, RESTful API endpoints, and orchestrates the application's workflows.</td>
+            </tr>
+            <tr>
+                <td><strong>Security</strong></td>
+                <td>Spring Security, JWT</td>
+                <td>Secures API endpoints, manages user sessions via JSON Web Tokens, and enforces role-based access.</td>
+            </tr>
+            <tr>
+                <td><strong>Real-Time Engine</strong></td>
+                <td>WebSockets, STOMP</td>
+                <td>Facilitates full-duplex communication to broadcast live bids instantly without page reloads.</td>
+            </tr>
+            <tr>
+                <td><strong>Database</strong></td>
+                <td>MySQL, Spring Data JPA</td>
+                <td>Relational database used for persistent, structured storage of users, properties, and auction histories.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>9. Implementation</h2>
+    <p>The system is broken down into specific modules to ensure maintainability and separation of concerns. Below is a breakdown of the core implemented modules:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Module Name</th>
+                <th>Key Features Implemented</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Authentication Module</strong></td>
+                <td>User registration, login, secure OTP verification flows, and JWT token generation.</td>
+            </tr>
+            <tr>
+                <td><strong>Property Management</strong></td>
+                <td>Auctioneers can add new properties with images and details. Buyers can browse and view property listings.</td>
+            </tr>
+            <tr>
+                <td><strong>Bidder Verification</strong></td>
+                <td>Bidders upload proof of income documents. Auctioneers manually review and approve/reject these applications.</td>
+            </tr>
+            <tr>
+                <td><strong>Live Auction Engine</strong></td>
+                <td>Real-time bidding room where verified bidders can place bids. The system validates bids and broadcasts the highest bid to all connected clients immediately.</td>
+            </tr>
+            <tr>
+                <td><strong>Dashboard & Results</strong></td>
+                <td>Role-specific dashboards allowing users to view their bidding history, auction results, and property statuses.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>10. Results and Discussion</h2>
+    <p>The application successfully demonstrates a seamless flow from user registration to live bidding. Testing revealed that the WebSocket implementation effectively broadcasts new bids with minimal latency, ensuring all participants view the highest bid concurrently. The robust role-based access control prevents unauthorized users from accessing the auctioneer dashboards or participating in auctions without prior approval of their income proofs. The user interface remains responsive and intuitive, fulfilling the project's usability goals.</p>
+
+    <h2>11. Conclusion and Future Work</h2>
+    <p><strong>Conclusion:</strong> The House Bidding Application effectively digitizes the traditional real estate auction process. By combining a responsive frontend with a robust, real-time backend, the project achieves its goal of providing a secure, transparent, and accessible platform for property bidding.</p>
+    <p><strong>Future Work:</strong> Future enhancements will focus on integrating a secure payment gateway to handle earnest money deposits directly within the platform. Additionally, there is potential to implement AI-driven image verification to automatically validate property images, and to develop cross-platform mobile applications to further increase accessibility.</p>
+
+    <h2>12. References / Bibliography</h2>
+    <ol>
+        <li>React Documentation. "Getting Started with React." Facebook Open Source.</li>
+        <li>Spring Framework Documentation. "Spring Boot Reference Guide." Pivotal Software.</li>
+        <li>Fette, I., and Melnikov, A. (2011). "The WebSocket Protocol" (RFC 6455). Internet Engineering Task Force.</li>
+        <li>STOMP Protocol Specification. "Simple Text Oriented Messaging Protocol."</li>
+    </ol>
+</div>
+
+</body>
+</html>

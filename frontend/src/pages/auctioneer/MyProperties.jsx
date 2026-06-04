@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getMyProperties } from '../../services/propertyService';
 import { useNavigate } from 'react-router-dom';
+import { assetUrl } from '../../config/api';
 
 const STATUS_STYLE = {
   PENDING:  { background: '#fef3c7', color: '#92400e', label: '⏳ Pending Review' },
@@ -66,7 +67,7 @@ export default function MyProperties() {
 
               {/* Image */}
               <img
-                src={`http://localhost:8081${p.imageUrl}`}
+                src={assetUrl(p.imageUrl)}
                 alt={p.title}
                 style={styles.img}
                 onError={e => {
@@ -109,7 +110,7 @@ export default function MyProperties() {
                 {/* Document link */}
                 {p.documentUrl && (
                   <a
-                    href={`http://localhost:8081${p.documentUrl}`}
+                    href={assetUrl(p.documentUrl)}
                     target="_blank"
                     rel="noreferrer"
                     style={styles.docLink}

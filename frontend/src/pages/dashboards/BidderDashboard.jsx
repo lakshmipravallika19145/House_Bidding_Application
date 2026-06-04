@@ -5,7 +5,8 @@ import DashboardLayout from "../../components/DashboardLayout"
 import ApplyModal from "../../components/ApplyModal"
 
 // ── Constants ──────────────────────────────────────────────────────────────────
-const BASE = "http://localhost:8081"
+import { API_BASE } from "../../config/api"
+const BASE = API_BASE
 
 // ── Utilities ─────────────────────────────────────────────────────────────────
 function formatINR(v) {

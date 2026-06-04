@@ -1,9 +1,10 @@
 import { useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import axios from "axios"
+import { API_URL } from "../config/api"
 
 const api = axios.create({
-  baseURL: "http://localhost:8081/api",
+  baseURL: API_URL,
   withCredentials: true
 })
 

@@ -5,6 +5,7 @@ import {
   approveProperty,
   rejectProperty
 } from '../../services/propertyService';
+import { assetUrl } from '../../config/api';
 
 export default function VerifyProperties() {
   const navigate = useNavigate();
@@ -116,7 +117,7 @@ export default function VerifyProperties() {
 
             {/* Image */}
             <img
-              src={`http://localhost:8081${p.imageUrl}`}
+              src={assetUrl(p.imageUrl)}
               alt={p.title}
               style={styles.img}
               onError={e => {
@@ -149,7 +150,7 @@ export default function VerifyProperties() {
               {/* Document */}
               {p.documentUrl && (
                 <a
-                  href={`http://localhost:8081${p.documentUrl}`}
+                  href={assetUrl(p.documentUrl)}
                   target="_blank"
                   rel="noreferrer"
                   style={styles.docLink}
