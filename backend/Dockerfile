@@ -17,4 +17,5 @@ WORKDIR /app
 COPY --from=build /app/target/demo-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8081
-CMD ["java", "-jar", "app.jar"]
+# Render sets PORT at runtime; bind to all interfaces
+CMD ["sh", "-c", "java -Dserver.port=${PORT:-8081} -Dserver.address=0.0.0.0 -jar app.jar"]

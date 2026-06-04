@@ -3,6 +3,9 @@ spring:
     url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/house_auction_db}
     username: ${SPRING_DATASOURCE_USERNAME:root}
     password: ${SPRING_DATASOURCE_PASSWORD:}
+    hikari:
+      connection-timeout: 60000
+      maximum-pool-size: 5
   jpa:
     hibernate:
       ddl-auto: update
@@ -34,4 +37,5 @@ file:
   upload-dir: uploads
 
 server:
+  address: 0.0.0.0
   port: ${PORT:8081}
