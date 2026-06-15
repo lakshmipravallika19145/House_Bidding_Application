@@ -41,7 +41,11 @@ export default function Register() {
             setMessage("OTP sent to " + form.email)
             setStep(2)
         } catch (err) {
-            setMessage(err.response?.data || "Registration failed")
+            if (!err.response) {
+                setMessage("Cannot reach backend. Set VITE_API_BASE_URL on Vercel to your Render URL, and add your Vercel URL to APP_CORS_ALLOWED_ORIGINS on Render.")
+            } else {
+                setMessage(typeof err.response?.data === "string" ? err.response.data : (err.response?.data?.message || "Registration failed"))
+            }
         }
         setLoading(false)
     }
