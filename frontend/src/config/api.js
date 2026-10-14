@@ -2,7 +2,7 @@
  * Backend base URL. Set VITE_API_BASE_URL in production (e.g. Vercel env vars).
  * Local default: http://localhost:8081
  */
-export const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8081"
+export const API_BASE = (import.meta.env.VITE_API_BASE_URL || "http://localhost:8081").replace(/\/+$/, "")
 
 export const API_URL = `${API_BASE}/api`
 export const WS_URL = `${API_BASE}/ws-auction`

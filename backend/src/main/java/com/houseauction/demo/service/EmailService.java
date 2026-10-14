@@ -1,22 +1,35 @@
 package com.houseauction.demo.service;
 
+import com.houseauction.demo.model.Auction;
 import com.houseauction.demo.model.AuctionApplication;
 import com.houseauction.demo.model.Property;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import com.houseauction.demo.model.Auction;
+
 @Service
 public class EmailService {
 
-    private final JavaMailSender mailSender;
+    private static final Logger log = LoggerFactory.getLogger(EmailService.class);
 
-    @Value("${app.admin-email:admin@example.com}")
+    private final HttpMailSender mailSender;
+
+    @Value("${app.admin-email}")
     private String adminEmail;
 
-    public EmailService(JavaMailSender mailSender) {
+    public EmailService(HttpMailSender mailSender) {
         this.mailSender = mailSender;
+    }
+
+    // Notification emails must never break the main workflow
+    private void safeSend(SimpleMailMessage msg) {
+        try {
+            mailSender.send(msg);
+        } catch (Exception e) {
+            log.error("Notification email failed (subject: {}): {}", msg.getSubject(), e.getMessage());
+        }
     }
 
     // ── Email to ADMIN when auctioneer uploads ───────────────────────────
@@ -32,7 +45,7 @@ public class EmailService {
                         "Submitted by: " + p.getAuctioneer().getEmail() + "\n\n" +
                         "Please log in to the admin dashboard to approve or reject it."
         );
-        mailSender.send(msg);
+        safeSend(msg);
     }
 
     // ── Email to AUCTIONEER when admin approves ──────────────────────────
@@ -47,7 +60,7 @@ public class EmailService {
                         "Price   : ₹" + p.getStartingPrice() + "\n\n" +
                         "It is now live and visible to bidders."
         );
-        mailSender.send(msg);
+        safeSend(msg);
     }
 
     // ── Email to AUCTIONEER when admin rejects ───────────────────────────
@@ -62,7 +75,7 @@ public class EmailService {
                         "Rejection Reason: " + p.getRejectionReason() + "\n\n" +
                         "Please update your listing and resubmit."
         );
-        mailSender.send(msg);
+        safeSend(msg);
     }
 
     // ── Email to AUCTIONEER when a bidder applies for their auction ──────
@@ -73,7 +86,6 @@ public class EmailService {
         String bidderName       = app.getFullName();
         String bidderEmail      = app.getBidder().getEmail();
         String bidderPhone      = app.getPhone();
-
 
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(auctioneerEmail);
@@ -91,7 +103,7 @@ public class EmailService {
                         "Please log in to your auctioneer dashboard to review and approve or reject this application.\n\n" +
                         "-- House Auction Platform"
         );
-        mailSender.send(msg);
+        safeSend(msg);
     }
 
     // ── Email to BIDDER when auctioneer approves their application ───────
@@ -117,7 +129,7 @@ public class EmailService {
                         "Best of luck!\n" +
                         "-- House Auction Platform"
         );
-        mailSender.send(msg);
+        safeSend(msg);
     }
 
     // ── Email to BIDDER when auctioneer rejects their application ────────
@@ -144,18 +156,19 @@ public class EmailService {
                         "If you believe this is a mistake, please contact the auctioneer or our support team.\n\n" +
                         "-- House Auction Platform"
         );
-        mailSender.send(msg);
+        safeSend(msg);
     }
-    // ── Email to WINNER when auction closes ──────────────────────────
+
+    // ── Email to WINNER when auction closes ──────────────────────────────
     public void notifyAuctionWinner(Auction auction) {
         if (auction.getWinner() == null) return;
 
-        String winnerEmail    = auction.getWinner().getEmail();
-        String winnerName     = auction.getWinner().getName();
-        String propertyTitle  = auction.getProperty().getTitle();
+        String winnerEmail      = auction.getWinner().getEmail();
+        String winnerName       = auction.getWinner().getName();
+        String propertyTitle    = auction.getProperty().getTitle();
         String propertyLocation = auction.getProperty().getLocation();
-        String winningBid     = "₹" + String.format("%,.0f", auction.getCurrentBid());
-        String auctioneerEmail = auction.getAuctioneer().getEmail();
+        String winningBid       = "₹" + String.format("%,.0f", auction.getCurrentBid());
+        String auctioneerEmail  = auction.getAuctioneer().getEmail();
 
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(winnerEmail);
@@ -173,10 +186,10 @@ public class EmailService {
                         "Please log in to your bidder dashboard to view your auction result.\n\n" +
                         "-- House Auction Platform"
         );
-        mailSender.send(msg);
+        safeSend(msg);
     }
 
-    // ── Email to AUCTIONEER when their auction closes ─────────────────
+    // ── Email to AUCTIONEER when their auction closes ────────────────────
     public void notifyAuctioneerAuctionClosed(Auction auction) {
         String auctioneerEmail = auction.getAuctioneer().getEmail();
         String propertyTitle   = auction.getProperty().getTitle();
@@ -204,8 +217,9 @@ public class EmailService {
                                 : "The auction closed with no bids. You may schedule a new auction.\n\n") +
                         "-- House Auction Platform"
         );
-        mailSender.send(msg);
+        safeSend(msg);
     }
+
     // ── Helper: format bid history enum to readable string ───────────────
     private String formatBidHistory(String history) {
         if (history == null) return "Not specified";

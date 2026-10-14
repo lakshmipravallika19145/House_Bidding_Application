@@ -11,6 +11,7 @@ export const publicApi = axios.create({
     baseURL: API_URL,
     withCredentials: false,
 })
+
 api.interceptors.request.use(
     (config) => {
         // Try sessionStorage first (tab-specific), fall back to localStorage
@@ -22,15 +23,14 @@ api.interceptors.request.use(
     },
     (error) => Promise.reject(error)
 )
+
 // ── Session-expiry interceptor ────────────────────────────────────────────────
-// When the backend returns 401 (or 403/400 used for expired sessions),
-// clear local state and redirect to login automatically.
+// 401 = unauthenticated/expired session. 403 can be a valid role/permission
+// denial, so we do not force logout on 403.
 api.interceptors.response.use(
     response => response,
     error => {
         const status = error?.response?.status
-        // 401 = unauthenticated/expired session. 403 can be valid role/permission denial,
-        // so do not force logout on 403.
         if (status === 401) {
             // Avoid redirect loops if already on login page
             if (!window.location.pathname.includes("/login")) {
@@ -109,6 +109,10 @@ export const getMyAuctions = () =>
 export const getActiveAuctions = () =>
     api.get("/auctions")
 
+/** Auctioneer: cancel an auction (only before start time) */
+export const cancelAuction = (auctionId) =>
+    api.put(`/auctions/${auctionId}/cancel`)
+
 // ── Property Deletion Requests ────────────────────────────────────────────────
 export const requestPropertyDeletion = (id, reason, proofFile) => {
     const fd = new FormData()
@@ -142,6 +146,10 @@ export const getMyApplications = () =>
 export const getMyApplicationForAuction = (auctionId) =>
     api.get(`/auction-applications/my/${auctionId}`)
 
+/** Bidder: withdraw their application for an auction (before auction starts) */
+export const withdrawApplication = (auctionId) =>
+    api.delete(`/auction-applications/${auctionId}/withdraw`)
+
 /** Auctioneer: get all applications for one of their auctions */
 export const getAuctionApplications = (auctionId) =>
     api.get(`/auction-applications/auction/${auctionId}`)
@@ -153,16 +161,7 @@ export const approveApplication = (applicationId) =>
 /** Auctioneer: reject a bidder's application with a reason */
 export const rejectApplication = (applicationId, reason) =>
     api.put(`/auction-applications/${applicationId}/reject`, { reason })
-// ── ADD THESE TWO FUNCTIONS to your existing authService.js ──────────────────
-// Place them in the "Bidder Applications" section at the bottom
 
-// Auctioneer: cancel an auction (only before start time)
-export const cancelAuction = (auctionId) =>
-    api.put(`/auctions/${auctionId}/cancel`)
-
-// Bidder: withdraw their application for an auction (before auction starts)
-export const withdrawApplication = (auctionId) =>
-    api.delete(`/auction-applications/${auctionId}/withdraw`)
 // ── Live Auction Room ─────────────────────────────────────────────────────────
 
 /** Get full auction state when entering the room */

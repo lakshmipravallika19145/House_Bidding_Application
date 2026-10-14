@@ -2,8 +2,9 @@ package com.houseauction.demo.service;
 
 import com.houseauction.demo.model.User;
 import com.houseauction.demo.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -13,9 +14,12 @@ import java.util.UUID;
 public class PasswordResetService {
 
     private final UserRepository userRepository;
-    private final JavaMailSender mailSender;
+    private final HttpMailSender mailSender;
 
-    public PasswordResetService(UserRepository userRepository, JavaMailSender mailSender) {
+    @Value("${app.frontend-url}")
+    private String frontendUrl;
+
+    public PasswordResetService(UserRepository userRepository, HttpMailSender mailSender) {
         this.userRepository = userRepository;
         this.mailSender = mailSender;
     }
@@ -30,7 +34,8 @@ public class PasswordResetService {
         user.setResetTokenExpiry(LocalDateTime.now().plusMinutes(15));
         userRepository.save(user);
 
-        String resetLink = "http://localhost:5173/reset-password?token=" + token;
+        String base = frontendUrl.replaceAll("/+$", "");
+        String resetLink = base + "/reset-password?token=" + token;
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
@@ -41,8 +46,7 @@ public class PasswordResetService {
     }
 
     // Step 2: Validate token and update password
-    public void resetPassword(String token, String newPassword,
-                              org.springframework.security.crypto.password.PasswordEncoder encoder) {
+    public void resetPassword(String token, String newPassword, PasswordEncoder encoder) {
         User user = userRepository.findByResetToken(token)
                 .orElseThrow(() -> new RuntimeException("Invalid or expired reset link"));
 
