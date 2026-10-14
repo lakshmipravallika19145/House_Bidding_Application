@@ -2,4 +2,4 @@ target/
 uploads/
 .idea/
 *.iml
-src/main/resources/application.yml
+
