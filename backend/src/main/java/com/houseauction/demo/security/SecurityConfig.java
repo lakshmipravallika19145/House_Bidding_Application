@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 
                         // ── Public ────────────────────────────────────────────────
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers("/api/password-reset/**").permitAll()
                         .requestMatchers("/api/huggingface/**").permitAll()  // ← ADDED
                         .requestMatchers("/uploads/**").permitAll()
